@@ -11,7 +11,7 @@
   
   
 
-  <link rel="canonical" href="http://timoyang.github.com">
+  <link rel="canonical" href="http://timoyang.github.com/blog/2012/11/25/chu-shi-fabric">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="timo Blog" type="application/atom+xml">
@@ -35,7 +35,7 @@
 <div class="clear"></div>
 <ul id="nav">
   
-    <li> <a href="/" class="current">blog</a> </li>
+    <li> <a href="/">blog</a> </li>
   
 
   
@@ -43,14 +43,9 @@
   
 </ul>
 
-    <div id="main"> 
-
+    <div id="main"> <div class="post-header">
   
-  <div class="post"> <div class="post-header">
-  
-    <h1 class="post-title">
-      <a href="/blog/2012/11/25/chu-shi-fabric/">初试fabric</a>
-    </h1>
+    <h1 class="post-title">初试fabric</h1>
   
   
 
@@ -133,102 +128,33 @@ sudo()                -- 执行远程sudo
 
 <p>  感觉这个工具用起来，相应的运维脚本清晰易读；区分角色这个功能非常贴心；混合本地操作和远程操作，书写方便；个人觉得比较好的一点是基于multiprocessing并发地执行，通常涉及到远程操作的时候，伴随这大量的网络IO等待，并发执行，大大提高执行的效率。非常Pythonic的工具。:)</p>
 </div>
- </div>
 
+
+<div class="post-single">
+  <div class="post-meta">
+    
+
+<span class="categories">
+  Categories:
   
-  <div class="post"> <div class="post-header">
+    <a class='category' href='/blog/categories/自动化/'>自动化</a>
   
-    <h1 class="post-title">
-      <a href="/blog/2012/11/20/webfu-wu-qi-kuo-rong/">Web服务器扩容</a>
-    </h1>
+</span>
+
+
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://timoyang.github.com/blog/2012/11/25/chu-shi-fabric/" data-via="" data-counturl="http://timoyang.github.com/blog/2012/11/25/chu-shi-fabric/" >Tweet</a>
   
   
-
-
-
-
-
-
-
-
   
-
-
-<time datetime="2012-11-20T23:55:00+08:00" pubdate data-updated="true">Nov 20<span>th</span>, 2012</time>
 </div>
 
-<div class="post-content"><p>  随着公司近期的各种推广活动，负责的业务访问量突增很多，为了100%支撑业务的需求，最近对前端web机器做了一次扩容，各种折腾，收获很多。:)</p>
+    
+  </div>
+  <div class="clear"></div>
 
-<p>  对一台web服务器的扩容大致包括：</p>
-
-<ul>
-<li><p>基础环境的搭建</p></li>
-<li><p>应用的部署</p></li>
-<li><p>网络策略的申请及验证</p></li>
-<li><p>依赖的相关权限的申请及验证</p></li>
-</ul>
-
-
-<p>  当面对数量很多的服务器的时候，自动化已经不是一个要不要做的问题，而是怎样做得更好的问题。比较传统的做法是通过运维编写相应的部署脚本，推送到目的机器上执行，达到基础环境的部署目的，当然也有很多开源的自动化管理工具（如puppet），能将这些重复的体力劳动大大精简。</p>
-
-<p>  一个成熟的运维团队，对于知识的积淀应该做到例行化，通过wiki或者bolg的方式保留下来，不但能在下次遇到同样问题的时候，迅速找到答案，还可以帮助刚加入团队的新人更快地对系统有比较全面的了解。</p>
-
-<p>  在验证网络策略的过程中，发现之前是通过抽检的方式，随机去检查访问策略是否实施完成，这种方法不但耗时，而且效果非常不理想。为了达到偷懒的目的，自己折腾了一个验证的脚本，感觉效果还不错。：P
-  想方设法地通过工具去“偷懒”，总能使日常的工作多了几分乐趣。</p>
-
-<p>  &#8211;EOF&#8211;</p>
-</div>
- </div>
-
-  
-  <div class="post"> <div class="post-header">
-  
-    <h1 class="post-title">
-      <a href="/blog/2012/11/15/xiang-you-xiu-de-yun-wei-gong-cheng-shi-na-yang-si-kao/">像优秀的运维工程师那样思考</a>
-    </h1>
-  
-  
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-11-15T21:54:00+08:00" pubdate data-updated="true">Nov 15<span>th</span>, 2012</time>
-</div>
-
-<div class="post-content"><p>  一转眼入职也3个多月了，多多少少对运维有了一些认识，总想找个时间梳理一下自己的一些认识，正好今天就把这篇流水帐作为第一篇自己的博客。</p>
-
-<p>  作为一个刚毕业的学生，选择运维作为自己职业的方向或多或少会显得有点另类，在毕业找工作的那段时间几乎每个拿到我的简历的hr都会问我同一个问题“为什么你会想做运维？”。说来也是非常幸运，稀里糊涂地来到华工，稀里糊涂地加入knss，稀里糊涂地加入有米，一步一步见证了公司的成长，同时自己也伴随着公司飞速地成长。在整个过程中，深刻地认识到每一个位置上的人都是不可或缺的，各司其责，把自己的事情做得足够好，这样才能达到我们想去的地方。由于当时缺乏运维这块的人，所以我或多或少地开始接触运维这块知识，渐渐产生兴趣，想去折腾一下。毕业的时候正好有这么一个机会，于是我就来了。一个人来到深圳，开始自己的第一份工作。（：D故事背景有点长了）</p>
-
-<p>  什么是运维？运维的核心职责就是在合理的成本的前提保证线上稳定运营，在技术上做好保障，给用户提供高品质的服务和体验。看似简单，但是真的实践起来可就没那么轻松了。如何对系统进行全面及时的监控，如何发现和解决系统的性能瓶颈，如何在单台机器故障的情况下保证服务的质量，如何做到在最低的成本的情况下提供最优的服务。。。</p>
-
-<p>  优秀的运维工程师会怎样思考问题？</p>
-
-<p>  当构建监控系统的时候，知道应该监控些什么以及如何监控，配合合适的告警策略，将监控系统作为了解自己系统的眼睛。通过监控系统，准确地掌握系统的真实情况。</p>
-
-<p>  当面对性能瓶颈的时候，可以从系统层面和应用层面去全面分析，从根本上解决性能瓶颈。</p>
-
-<p>  当需要批量处理事务的时候，熟练的运用脚本，优雅地将偷懒进行到极致。</p>
-
-<p>  。。。</p>
-
-<p>  由于我自己也刚刚开始，优秀的运维工程师到底怎样思考，我也不知道：P</p>
-
-<p>  有能力保证自己认可的系统的稳定可用，并努力把它变得更好。这是我努力的方向。</p>
-
-<p>  －－EOF－－</p>
-</div>
- </div>
-
-
-<div id="pagination">
-  
   
 </div>
  </div>

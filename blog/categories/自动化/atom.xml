@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 自动化 | timo Blog]]></title>
+  <link href="http://timoyang.github.com/blog/categories/自动化/atom.xml" rel="self"/>
+  <link href="http://timoyang.github.com/"/>
+  <updated>2012-11-25T02:45:56+08:00</updated>
+  <id>http://timoyang.github.com/</id>
+  <author>
+    <name><![CDATA[timoyang]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[初试fabric]]></title>
+    <link href="http://timoyang.github.com/blog/2012/11/25/chu-shi-fabric/"/>
+    <updated>2012-11-25T01:25:00+08:00</updated>
+    <id>http://timoyang.github.com/blog/2012/11/25/chu-shi-fabric</id>
+    <content type="html"><![CDATA[<p>  在日常工作中，我们总会遇到需要批量地到一堆机器上执行一些操作，以达到某些运维目的。大家基本都会包装一些自己的小工具去完成这类的工作，但是如果有成熟的工具，为啥不用呢？最近了解fabric这个工具，感觉挺有趣的，就拿来试了一下。:)</p>
+
+<p>  <a href="http://fabfile.org">fabric</a> 给自己下的定义是：Simple, Pythonic remote
+  excution and deployment. 基本已经告诉大家它是干啥的。</p>
+
+<h2>安装</h2>
+
+<pre><code>sudo apt-get install fabric
+</code></pre>
+
+<p>  如果是从git
+  clone下来的源码编译安装的话，记得需要把python的bin路径添加到PATH里面，要不然执行fab命令的时候，会提示没有这个命令。</p>
+
+<h2>实践</h2>
+
+<p>  一个最常见的场景：我们需要批量的推送某个文件到目的机器，然后重启apache</p>
+
+<p>  传统方法：</p>
+
+<pre><code>scp xxx pub@x.x.x.x:/tmp/xxx
+ssh x.x.x.x /etc/init.d/httpd restart
+</code></pre>
+
+<p>  fabric实现：</p>
+
+<pre><code>$ cat fabfile
+
+from fabric.api import sudo
+from fabric.operation import put
+
+def test():
+  put('xxx', '/tmp/xxx')
+  sudo('/etc/init.d/httpd restart')
+
+$ fab -H x.x.x.x test
+</code></pre>
+
+<p>  这个一看好像fabric好像比传统的方式要麻烦很多，但是fabric是通过对paramiko进行了封装，ssh操作更加方便，将需要在远端执行的操作，书写起来就像是本地一样。</p>
+
+<h3>常用配置</h3>
+
+<pre><code>env.user              -- ssh登录到远端机器的用户
+env.port              -- ssh绑定的端口
+env.hosts             -- 远端机器ip列表
+env.passwords         -- 以 'ip':'password' 的格式，保存相应password
+env.roledefs          -- 角色定义 { 'web': ['x.x.x.x', 'y.y.y.y'], 'db': ['z.z.z.z']}
+</code></pre>
+
+<h3>常用命令</h3>
+
+<pre><code>fab -H                -- 指定执行的host
+fab -R                -- 指定执行的角色
+fab -P -z             -- 指定并发执行的数目，默认是串行，-z指定具体个数
+</code></pre>
+
+<h3>常用命令</h3>
+
+<pre><code>local()               -- 本地执行
+run()                 -- 远程执行
+put()                 -- 推送文件
+get()                 -- 下载文件
+sudo()                -- 执行远程sudo
+</code></pre>
+
+<p>  感觉这个工具用起来，相应的运维脚本清晰易读；区分角色这个功能非常贴心；混合本地操作和远程操作，书写方便；个人觉得比较好的一点是基于multiprocessing并发地执行，通常涉及到远程操作的时候，伴随这大量的网络IO等待，并发执行，大大提高执行的效率。非常Pythonic的工具。:)</p>
+]]></content>
+  </entry>
+  
+</feed>
