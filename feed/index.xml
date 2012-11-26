@@ -4,7 +4,7 @@
   <title><![CDATA[timo Blog]]></title>
   <link href="http://timoyang.github.com/feed" rel="self"/>
   <link href="http://timoyang.github.com/"/>
-  <updated>2012-11-25T02:58:02+08:00</updated>
+  <updated>2012-11-26T23:13:34+08:00</updated>
   <id>http://timoyang.github.com/</id>
   <author>
     <name><![CDATA[timoyang]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[进程管理工具-supervisor]]></title>
+    <link href="http://timoyang.github.com/blog/2012/11/26/jin-cheng-guan-li-gong-ju-supervisor/"/>
+    <updated>2012-11-26T22:37:00+08:00</updated>
+    <id>http://timoyang.github.com/blog/2012/11/26/jin-cheng-guan-li-gong-ju-supervisor</id>
+    <content type="html"><![CDATA[<p>  最近折腾了一个jsonrpc的server来优化之前项目中的一些性能瓶颈，server需要作为守护进程一直在后台运行，传统的方式：</p>
+
+<pre><code>$ nohup python server.py &amp;
+</code></pre>
+
+<p>  因为需要经常的重启server，通过nobup的方式非常不方便，所以想找一种更加方便的工具来管理进程。</p>
+
+<p>  <a href="https://github.com/Supervisor/supervisor">supervisor</a>是一个python实现的进程管理工具，给自己的定义是：Supervisor
+  is a client/server system that allows its users to control a number of
+  processes on UNIX-like operating system.</p>
+
+<h2>安装</h2>
+
+<pre><code>sudo apt-get install supervisor
+
+/etc/init.d/supervisor                 --superviosr server启动脚本
+/etc/supervisor/supervisord.conf       --supervisor 主配置文件
+supervisorctl                          --supervisor client控制命令
+</code></pre>
+
+<h2>配置</h2>
+
+<p>  例如，我是server名为：rpc_server.py,
+  需要在/etc/supervisor/supervisor.conf中添加如下配置</p>
+
+<pre><code>[program:rpc_server]                   --进程名rpc_server
+command = python rpc_server.py         --指定对应的执行命令
+autostart = true                       --随着supervisord自动启动
+stdout_logfile = /var/log/rpc_server.log   --指定std重定向
+</code></pre>
+
+<h2>操作</h2>
+
+<pre><code>$ /etc/init.d/supervisor restart          --重启supervisord服务
+$ supervisorctl status rpc_server         --查看rpc_server状态
+$ supervisorctl start|stop|restart rpc_server     --实现对rpc_server进程的控制
+</code></pre>
+
+<p>  做一件事，并把这件事做好。非常不错的工具。</p>
+
+<p>  &#8212;EOF&#8212;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[初试fabric]]></title>

@@ -7,13 +7,11 @@
 
   <meta name="author" content="timoyang">
   
-  <meta name="description" content="Web服务器扩容 Nov 20th, 2012 随着公司近期的各种推广活动，负责的业务访问量突增很多，为了100%支撑业务的需求，最近对前端web机器做了一次扩容，各种折腾，收获很多。:) 对一台web服务器的扩容大致包括： 基础环境的搭建
-应用的部署
-网络策略的申请及验证 &hellip;">
+  <meta name="description" content="进程管理工具-supervisor Nov 26th, 2012 最近折腾了一个jsonrpc的server来优化之前项目中的一些性能瓶颈，server需要作为守护进程一直在后台运行，传统的方式： $ nohup python server.py &amp; 因为需要经常的重启server， &hellip;">
   
   
 
-  <link rel="canonical" href="http://timoyang.github.com/blog/2012/11/20/webfu-wu-qi-kuo-rong">
+  <link rel="canonical" href="http://timoyang.github.com/blog/2012/11/26/jin-cheng-guan-li-gong-ju-supervisor">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="timo Blog" type="application/atom+xml">
@@ -47,7 +45,7 @@
 
     <div id="main"> <div class="post-header">
   
-    <h1 class="post-title">Web服务器扩容</h1>
+    <h1 class="post-title">进程管理工具-supervisor</h1>
   
   
 
@@ -61,29 +59,50 @@
   
 
 
-<time datetime="2012-11-20T23:55:00+08:00" pubdate data-updated="true">Nov 20<span>th</span>, 2012</time>
+<time datetime="2012-11-26T22:37:00+08:00" pubdate data-updated="true">Nov 26<span>th</span>, 2012</time>
 </div>
 
-<div class="post-content"><p>  随着公司近期的各种推广活动，负责的业务访问量突增很多，为了100%支撑业务的需求，最近对前端web机器做了一次扩容，各种折腾，收获很多。:)</p>
+<div class="post-content"><p>  最近折腾了一个jsonrpc的server来优化之前项目中的一些性能瓶颈，server需要作为守护进程一直在后台运行，传统的方式：</p>
 
-<p>  对一台web服务器的扩容大致包括：</p>
+<pre><code>$ nohup python server.py &amp;
+</code></pre>
 
-<ul>
-<li><p>基础环境的搭建</p></li>
-<li><p>应用的部署</p></li>
-<li><p>网络策略的申请及验证</p></li>
-<li><p>依赖的相关权限的申请及验证</p></li>
-</ul>
+<p>  因为需要经常的重启server，通过nobup的方式非常不方便，所以想找一种更加方便的工具来管理进程。</p>
 
+<p>  <a href="https://github.com/Supervisor/supervisor">supervisor</a>是一个python实现的进程管理工具，给自己的定义是：Supervisor
+  is a client/server system that allows its users to control a number of
+  processes on UNIX-like operating system.</p>
 
-<p>  当面对数量很多的服务器的时候，自动化已经不是一个要不要做的问题，而是怎样做得更好的问题。比较传统的做法是通过运维编写相应的部署脚本，推送到目的机器上执行，达到基础环境的部署目的，当然也有很多开源的自动化管理工具（如puppet），能将这些重复的体力劳动大大精简。</p>
+<h2>安装</h2>
 
-<p>  一个成熟的运维团队，对于知识的积淀应该做到例行化，通过wiki或者bolg的方式保留下来，不但能在下次遇到同样问题的时候，迅速找到答案，还可以帮助刚加入团队的新人更快地对系统有比较全面的了解。</p>
+<pre><code>sudo apt-get install supervisor
 
-<p>  在验证网络策略的过程中，发现之前是通过抽检的方式，随机去检查访问策略是否实施完成，这种方法不但耗时，而且效果非常不理想。为了达到偷懒的目的，自己折腾了一个验证的脚本，感觉效果还不错。：P
-  想方设法地通过工具去“偷懒”，总能使日常的工作多了几分乐趣。</p>
+/etc/init.d/supervisor                 --superviosr server启动脚本
+/etc/supervisor/supervisord.conf       --supervisor 主配置文件
+supervisorctl                          --supervisor client控制命令
+</code></pre>
 
-<p>  &#8211;EOF&#8211;</p>
+<h2>配置</h2>
+
+<p>  例如，我是server名为：rpc_server.py,
+  需要在/etc/supervisor/supervisor.conf中添加如下配置</p>
+
+<pre><code>[program:rpc_server]                   --进程名rpc_server
+command = python rpc_server.py         --指定对应的执行命令
+autostart = true                       --随着supervisord自动启动
+stdout_logfile = /var/log/rpc_server.log   --指定std重定向
+</code></pre>
+
+<h2>操作</h2>
+
+<pre><code>$ /etc/init.d/supervisor restart          --重启supervisord服务
+$ supervisorctl status rpc_server         --查看rpc_server状态
+$ supervisorctl start|stop|restart rpc_server     --实现对rpc_server进程的控制
+</code></pre>
+
+<p>  做一件事，并把这件事做好。非常不错的工具。</p>
+
+<p>  &#8212;EOF&#8212;</p>
 </div>
 
 
@@ -94,7 +113,7 @@
 <span class="categories">
   Categories:
   
-    <a class='category' href='/blog/categories/容量规划/'>容量规划</a>
+    <a class='category' href='/blog/categories/自动化/'>自动化</a>
   
 </span>
 
@@ -102,7 +121,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://timoyang.github.com/blog/2012/11/20/webfu-wu-qi-kuo-rong/" data-via="" data-counturl="http://timoyang.github.com/blog/2012/11/20/webfu-wu-qi-kuo-rong/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://timoyang.github.com/blog/2012/11/26/jin-cheng-guan-li-gong-ju-supervisor/" data-via="" data-counturl="http://timoyang.github.com/blog/2012/11/26/jin-cheng-guan-li-gong-ju-supervisor/" >Tweet</a>
   
   
   
