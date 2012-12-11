@@ -4,7 +4,7 @@
   <title><![CDATA[timo Blog]]></title>
   <link href="http://timoyang.github.com/atom.xml" rel="self"/>
   <link href="http://timoyang.github.com/"/>
-  <updated>2012-12-11T23:48:48+08:00</updated>
+  <updated>2012-12-11T23:51:27+08:00</updated>
   <id>http://timoyang.github.com/</id>
   <author>
     <name><![CDATA[timoyang]]></name>
@@ -22,11 +22,15 @@
 
 <p>  rsync是一个Unix/Linux上的远程同步工具。通过rsync算法，以增量的方式同步文件，以减小文件的传输量。</p>
 
-<p>  rsync的优势：
-  * 可以以镜像的形式保存文件目录
-  * 可以通过ssh的方式来传输文件
-  * 增量式同步文件，减小同步传输量
-  * 保持文件的权限，时间，软硬链接</p>
+<p>  rsync的优势：</p>
+
+<ul>
+<li><p>可以以镜像的形式保存文件目录</p></li>
+<li><p>可以通过ssh的方式来传输文件</p></li>
+<li><p>增量式同步文件，减小同步传输量</p></li>
+<li><p>保持文件的权限，时间，软硬链接</p></li>
+</ul>
+
 
 <p>  rsync的工作原理，coolshell这里有一篇详细介绍<a href="http://coolshell.com/articles/7425.html">rsync算法</a>,里面详细介绍了rysnc算法是怎样实现对文件的增量传输的。</p>
 
