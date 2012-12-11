@@ -7,7 +7,7 @@
 
   <meta name="author" content="timoyang">
   
-  <meta name="description" content="进程管理工具-supervisor Nov 26th, 2012 最近折腾了一个jsonrpc的server来优化之前项目中的一些性能瓶颈，server需要作为守护进程一直在后台运行，传统的方式： $ nohup python server.py &amp; 因为需要经常的重启server， &hellip;">
+  <meta name="description" content="Rsync 使用备忘 Dec 11th, 2012 最近一段时间高频率地使用rysnc，由于之前对这个工具的使用并不是很熟练，导致使用的过程中各种问题，现在这里记录备忘一下，借此梳理一下对rsync的认识。 rsync是一个Unix/Linux上的远程同步工具。通过rsync算法， &hellip;">
   
   
 
@@ -44,6 +44,99 @@
 </ul>
 
     <div id="main"> 
+
+  
+  <div class="post"> <div class="post-header">
+  
+    <h1 class="post-title">
+      <a href="/blog/2012/12/11/rsync-shi-yong-bei-wang/">Rsync 使用备忘</a>
+    </h1>
+  
+  
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-11T22:49:00+08:00" pubdate data-updated="true">Dec 11<span>th</span>, 2012</time>
+</div>
+
+<div class="post-content"><p>  最近一段时间高频率地使用rysnc，由于之前对这个工具的使用并不是很熟练，导致使用的过程中各种问题，现在这里记录备忘一下，借此梳理一下对rsync的认识。</p>
+
+<p>  rsync是一个Unix/Linux上的远程同步工具。通过rsync算法，以增量的方式同步文件，以减小文件的传输量。</p>
+
+<p>  rsync的优势：
+  * 可以以镜像的形式保存文件目录
+  * 可以通过ssh的方式来传输文件
+  * 增量式同步文件，减小同步传输量
+  * 保持文件的权限，时间，软硬链接</p>
+
+<p>  rsync的工作原理，coolshell这里有一篇详细介绍<a href="http://coolshell.com/articles/7425.html">rsync算法</a>,里面详细介绍了rysnc算法是怎样实现对文件的增量传输的。</p>
+
+<h2>rysnc 使用</h2>
+
+<pre><code>rsync SRC  DST #本地使用 SRC为源，DST为目标地址
+
+rsync user@host:SRC DST  # 通过shell从host拉去SRC 到本地 DST
+rsync SRC user@host:DST  # 通过sehll从本地SRC 推到 远程host DST
+
+rsync user@host::SRC DST  # 通过rsync 服务端拉取SRC 到本地 DST
+rsync SRC user@host::DST  #  推送本地SRC 到 远程rysnc 服务器 DST
+</code></pre>
+
+<p>  rsync 有两种工作模式，一种是C/S模式，这种方式需要启动rsyncd作为rysnc
+  server端，另外一种是通过ssh的方式传输文件。</p>
+
+<h2>具体使用场景</h2>
+
+<ul>
+<li><p>递归地同步某个文件夹</p>
+
+<p>rsync -avrz -e &#8216;ssh -p 36000&#8217; SRC user@host:DST</p>
+
+<p>-r 参数使rsync递归地对SRC的子目录进行同步</p>
+
+<p>-z 对传输内容进行压缩</p>
+
+<p>-e 指定使用的shell</p></li>
+<li><p>只想检测有哪些文件不通，而不做同步操作</p>
+
+<p>rsync -avrn -e &#8216;ssh -p 36000&#8217; SRC user@host:DST</p>
+
+<p>-n 参数使rsync仅检测SRC 和远端DST的差异，而不传输文件</p></li>
+<li><p>传输过程中需要保持被传输文件的属性</p>
+
+<p>rsync -avrzpogt &#8216;ssh -p 36000&#8217; SRC user@host:DST</p>
+
+<p>-p 保持文件的读写权限</p>
+
+<p>-o 保持文件的拥有者属性</p>
+
+<p>-g 保持文件测组属性</p>
+
+<p>-t 保持文件的时间戳不变</p></li>
+<li><p>需要筛选同步的文件</p>
+
+<p>rsync -avrz &#8211;exclude-from=FILE SRC user@host:DST</p>
+
+<p>&#8211;exclude-from 指点rsync不同步FILE 文件，FILE 的路径为SRC的相对路径</p></li>
+</ul>
+
+
+<p>  注意在rsync中路径的写法， &#8216;/www/logs/&#8217; 表示同步/www/logs下面的内容到DST ，
+  但是&#8217;/www/logs&#8217; 则是同步/www/logs这个文件夹到DST，就是在DST会建立相应的目录。</p>
+
+<p>  这里记录了我遇到的一些应用场景，放在这里做个备忘。</p>
+
+<p>  &#8212;EOF&#8212;</p>
+</div>
+ </div>
 
   
   <div class="post"> <div class="post-header">
@@ -310,6 +403,10 @@ sudo()                -- 执行远程sudo
     <div class="posts">
       <h2>Recent Posts</h2>
       <ul>
+        
+          <li>
+            <a href="/blog/2012/12/11/rsync-shi-yong-bei-wang/">rsync 使用备忘</a>
+          </li>
         
           <li>
             <a href="/blog/2012/11/26/jin-cheng-guan-li-gong-ju-supervisor/">进程管理工具-supervisor</a>
