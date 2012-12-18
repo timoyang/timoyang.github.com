@@ -7,11 +7,11 @@
 
   <meta name="author" content="timoyang">
   
-  <meta name="description" content="进程管理工具-supervisor Nov 26th, 2012 最近折腾了一个jsonrpc的server来优化之前项目中的一些性能瓶颈，server需要作为守护进程一直在后台运行，传统的方式： $ nohup python server.py &amp; 因为需要经常的重启server， &hellip;">
+  <meta name="description" content="Python Multiprocessing 使用实例 Dec 19th, 2012 随着web机器的不断增加，在最近的版本发布和配置发布过程中，真是伤透了脑筋，所以很迫切的对发布工具进行针对的优化。 具体场景：集中从发布中心向所有机器推送版本和配置文件，涉及到大量的网络IO， &hellip;">
   
   
 
-  <link rel="canonical" href="http://timoyang.github.com/blog/2012/11/26/jin-cheng-guan-li-gong-ju-supervisor">
+  <link rel="canonical" href="http://timoyang.github.com/blog/2012/12/19/python-multiprocessing-shi-yong-shi-li">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="timo Blog" type="application/atom+xml">
@@ -45,7 +45,7 @@
 
     <div id="main"> <div class="post-header">
   
-    <h1 class="post-title">进程管理工具-supervisor</h1>
+    <h1 class="post-title">Python Multiprocessing 使用实例</h1>
   
   
 
@@ -59,50 +59,59 @@
   
 
 
-<time datetime="2012-11-26T22:37:00+08:00" pubdate data-updated="true">Nov 26<span>th</span>, 2012</time>
+<time datetime="2012-12-19T00:28:00+08:00" pubdate data-updated="true">Dec 19<span>th</span>, 2012</time>
 </div>
 
-<div class="post-content"><p>  最近折腾了一个jsonrpc的server来优化之前项目中的一些性能瓶颈，server需要作为守护进程一直在后台运行，传统的方式：</p>
+<div class="post-content"><p>  随着web机器的不断增加，在最近的版本发布和配置发布过程中，真是伤透了脑筋，所以很迫切的对发布工具进行针对的优化。</p>
 
-<pre><code>$ nohup python server.py &amp;
+<p>  具体场景：集中从发布中心向所有机器推送版本和配置文件，涉及到大量的网络IO，之前的工具采用了比较传统的for循环ssh，在机器比较少的时候也能满足需求，但是现在机器多了起来，推送一次配置简直是个悲剧。考虑到每个对目标机器的推送的动作互相之间比较独立，所以考虑用多线程或多进程来推送配置。</p>
+
+<p>  因为python的全局解析锁的存在，python的多线程只能跑在一个cpu上，为了充分利用现在性能强劲的多核cpu，考虑用multiprocessing模块来实现这个推送工具。</p>
+
+<p>  关键的部分如下：</p>
+
+<pre><code>import multiprocessing, time
+
+def func(ips, results):
+  while True:
+    ip = ips.get()
+    if ip is None:
+      ips.task_done()
+      break
+    result = do_pub(ip)
+    ips.task_done()
+    results.put(result)
+    time.sleep(1)
+
+def pub():
+  ips = multiprocessing.JoinableQueue()
+  results = multiprocessing.JoinableQueue()
+
+  for i in ip_list:
+    ips.put(i)
+
+  process_num = 10
+  processes = []
+  for i in range(10):
+    processes.append(multiprocessing.Process(func, (ips, results,)))
+
+  for i in processes:
+    i.deamon = True
+    i.start()
+
+  ips.join()
+
+  result_num = results.qsize()
+  for i in result_num:
+    print results.get()
+
+if __name__ == '__main__':
+  pub()
 </code></pre>
 
-<p>  因为需要经常的重启server，通过nobup的方式非常不方便，所以想找一种更加方便的工具来管理进程。</p>
+<p>  实践了一下，目前看来效果很明显，但是实践的过程中，也发现很多值得折腾清楚的点，这些来几天把没搞请的折腾清楚，然后总结出来。</p>
 
-<p>  <a href="https://github.com/Supervisor/supervisor">supervisor</a>是一个python实现的进程管理工具，给自己的定义是：Supervisor
-  is a client/server system that allows its users to control a number of
-  processes on UNIX-like operating system.</p>
-
-<h2>安装</h2>
-
-<pre><code>sudo apt-get install supervisor
-
-/etc/init.d/supervisor                 --superviosr server启动脚本
-/etc/supervisor/supervisord.conf       --supervisor 主配置文件
-supervisorctl                          --supervisor client控制命令
-</code></pre>
-
-<h2>配置</h2>
-
-<p>  例如，我是server名为：rpc_server.py,
-  需要在/etc/supervisor/supervisor.conf中添加如下配置</p>
-
-<pre><code>[program:rpc_server]                   --进程名rpc_server
-command = python rpc_server.py         --指定对应的执行命令
-autostart = true                       --随着supervisord自动启动
-stdout_logfile = /var/log/rpc_server.log   --指定std重定向
-</code></pre>
-
-<h2>操作</h2>
-
-<pre><code>$ /etc/init.d/supervisor restart          --重启supervisord服务
-$ supervisorctl status rpc_server         --查看rpc_server状态
-$ supervisorctl start|stop|restart rpc_server     --实现对rpc_server进程的控制
-</code></pre>
-
-<p>  做一件事，并把这件事做好。非常不错的工具。</p>
-
-<p>  &#8212;EOF&#8212;</p>
+<p>  &#8212;EOF&#8211;</p>
 </div>
 
 
@@ -113,7 +122,7 @@ $ supervisorctl start|stop|restart rpc_server     --实现对rpc_server进程的
 <span class="categories">
   Categories:
   
-    <a class='category' href='/blog/categories/自动化/'>自动化</a>
+    <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/自动化/'>自动化</a>
   
 </span>
 
@@ -121,7 +130,7 @@ $ supervisorctl start|stop|restart rpc_server     --实现对rpc_server进程的
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://timoyang.github.com/blog/2012/11/26/jin-cheng-guan-li-gong-ju-supervisor/" data-via="" data-counturl="http://timoyang.github.com/blog/2012/11/26/jin-cheng-guan-li-gong-ju-supervisor/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://timoyang.github.com/blog/2012/12/19/python-multiprocessing-shi-yong-shi-li/" data-via="" data-counturl="http://timoyang.github.com/blog/2012/12/19/python-multiprocessing-shi-yong-shi-li/" >Tweet</a>
   
   
   

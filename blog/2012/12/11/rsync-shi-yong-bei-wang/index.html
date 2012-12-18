@@ -119,7 +119,10 @@ rsync SRC user@host::DST  #  推送本地SRC 到 远程rysnc 服务器 DST
 
 <p>-g 保持文件测组属性</p>
 
-<p>-t 保持文件的时间戳不变</p></li>
+<p>-t 保持文件的时间戳不变</p>
+
+<p>(更正： man rsync 里面有这么一句：-a equals -rlptgoD
+ 所以上面关于保持传输文件属性的地方有点不对:P)</p></li>
 <li><p>需要筛选同步的文件</p>
 
 <p>rsync -avrz &#8211;exclude-from=FILE SRC user@host:DST</p>
@@ -170,6 +173,10 @@ rsync SRC user@host::DST  #  推送本地SRC 到 远程rysnc 服务器 DST
       <ul>
         
           <li>
+            <a href="/blog/2012/12/19/python-multiprocessing-shi-yong-shi-li/">python multiprocessing 使用实例</a>
+          </li>
+        
+          <li>
             <a href="/blog/2012/12/11/rsync-shi-yong-bei-wang/">rsync 使用备忘</a>
           </li>
         
@@ -183,10 +190,6 @@ rsync SRC user@host::DST  #  推送本地SRC 到 远程rysnc 服务器 DST
         
           <li>
             <a href="/blog/2012/11/20/webfu-wu-qi-kuo-rong/">web服务器扩容</a>
-          </li>
-        
-          <li>
-            <a href="/blog/2012/11/15/xiang-you-xiu-de-yun-wei-gong-cheng-shi-na-yang-si-kao/">像优秀的运维工程师那样思考</a>
           </li>
         
       </ul>

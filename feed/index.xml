@@ -4,7 +4,7 @@
   <title><![CDATA[timo Blog]]></title>
   <link href="http://timoyang.github.com/feed" rel="self"/>
   <link href="http://timoyang.github.com/"/>
-  <updated>2012-12-11T23:51:27+08:00</updated>
+  <updated>2012-12-19T01:03:24+08:00</updated>
   <id>http://timoyang.github.com/</id>
   <author>
     <name><![CDATA[timoyang]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[python multiprocessing 使用实例]]></title>
+    <link href="http://timoyang.github.com/blog/2012/12/19/python-multiprocessing-shi-yong-shi-li/"/>
+    <updated>2012-12-19T00:28:00+08:00</updated>
+    <id>http://timoyang.github.com/blog/2012/12/19/python-multiprocessing-shi-yong-shi-li</id>
+    <content type="html"><![CDATA[<p>  随着web机器的不断增加，在最近的版本发布和配置发布过程中，真是伤透了脑筋，所以很迫切的对发布工具进行针对的优化。</p>
+
+<p>  具体场景：集中从发布中心向所有机器推送版本和配置文件，涉及到大量的网络IO，之前的工具采用了比较传统的for循环ssh，在机器比较少的时候也能满足需求，但是现在机器多了起来，推送一次配置简直是个悲剧。考虑到每个对目标机器的推送的动作互相之间比较独立，所以考虑用多线程或多进程来推送配置。</p>
+
+<p>  因为python的全局解析锁的存在，python的多线程只能跑在一个cpu上，为了充分利用现在性能强劲的多核cpu，考虑用multiprocessing模块来实现这个推送工具。</p>
+
+<p>  关键的部分如下：</p>
+
+<pre><code>import multiprocessing, time
+
+def func(ips, results):
+  while True:
+    ip = ips.get()
+    if ip is None:
+      ips.task_done()
+      break
+    result = do_pub(ip)
+    ips.task_done()
+    results.put(result)
+    time.sleep(1)
+
+def pub():
+  ips = multiprocessing.JoinableQueue()
+  results = multiprocessing.JoinableQueue()
+
+  for i in ip_list:
+    ips.put(i)
+
+  process_num = 10
+  processes = []
+  for i in range(10):
+    processes.append(multiprocessing.Process(func, (ips, results,)))
+
+  for i in processes:
+    i.deamon = True
+    i.start()
+
+  ips.join()
+
+  result_num = results.qsize()
+  for i in result_num:
+    print results.get()
+
+if __name__ == '__main__':
+  pub()
+</code></pre>
+
+<p>  实践了一下，目前看来效果很明显，但是实践的过程中，也发现很多值得折腾清楚的点，这些来几天把没搞请的折腾清楚，然后总结出来。</p>
+
+<p>  &#8212;EOF&#8211;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[rsync 使用备忘]]></title>
@@ -75,7 +133,10 @@ rsync SRC user@host::DST  #  推送本地SRC 到 远程rysnc 服务器 DST
 
 <p>-g 保持文件测组属性</p>
 
-<p>-t 保持文件的时间戳不变</p></li>
+<p>-t 保持文件的时间戳不变</p>
+
+<p>(更正： man rsync 里面有这么一句：-a equals -rlptgoD
+ 所以上面关于保持传输文件属性的地方有点不对:P)</p></li>
 <li><p>需要筛选同步的文件</p>
 
 <p>rsync -avrz &#8211;exclude-from=FILE SRC user@host:DST</p>
