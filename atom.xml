@@ -4,7 +4,7 @@
   <title><![CDATA[timo Blog]]></title>
   <link href="http://timoyang.github.com/atom.xml" rel="self"/>
   <link href="http://timoyang.github.com/"/>
-  <updated>2013-01-19T11:31:40+08:00</updated>
+  <updated>2013-02-28T22:34:25+08:00</updated>
   <id>http://timoyang.github.com/</id>
   <author>
     <name><![CDATA[timoyang]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[不会写页面的运维不是好产品]]></title>
+    <link href="http://timoyang.github.com/blog/2013/02/28/bu-hui-xie-ye-mian-de-yun-wei-bu-shi-hao-chan-pin/"/>
+    <updated>2013-02-28T22:16:00+08:00</updated>
+    <id>http://timoyang.github.com/blog/2013/02/28/bu-hui-xie-ye-mian-de-yun-wei-bu-shi-hao-chan-pin</id>
+    <content type="html"><![CDATA[<p>  最近在折腾之前写的一个运维工具的页面，真是让人纠结得不行。php写一下前端逻辑，python写一下后端的处理这些问题都不大，到了页面就犯难了，首先，没啥艺术细胞，其次，又没那么多时间去折腾前端那套东西。</p>
+
+<p>  之前就听说过bootstrap
+  这个twitter出品的前端框架，但一直没有机会尝试一下，前几天抽空看了一下，折腾了几个小时发现，这的框架真的像它给自己的定位一样:</p>
+
+<pre><code>By nerds, for nerds.
+</code></pre>
+
+<p>  基本上可以满足我的需求，感觉非常有用，特mark一下。</p>
+
+<p>  基础教程：</p>
+
+<p>  <a href="http://wrongwaycn.github.com/bootstrap/docs/index.html">Twitter Bootstrap
+  中文版</a>，
+  例子都非常清晰明了。很有用的工具。</p>
+
+<p>  &#8212;EOF&#8212;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[末日]]></title>
