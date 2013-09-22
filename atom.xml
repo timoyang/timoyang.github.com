@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://timoyang.github.io/atom.xml" rel="self"/>
   <link href="http://timoyang.github.io/"/>
-  <updated>2013-09-22T22:47:27+08:00</updated>
+  <updated>2013-09-22T22:54:19+08:00</updated>
   <id>http://timoyang.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -12,5 +12,14 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[台风吹走了代码]]></title>
+    <link href="http://timoyang.github.io/blog/2013/09/22/tai-feng-chui-zou-liao-dai-ma/"/>
+    <updated>2013-09-22T22:53:00+08:00</updated>
+    <id>http://timoyang.github.io/blog/2013/09/22/tai-feng-chui-zou-liao-dai-ma</id>
+    <content type="html"><![CDATA[<p>台风吹走了代码！</p>
+]]></content>
+  </entry>
   
 </feed>
